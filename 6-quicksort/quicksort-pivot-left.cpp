@@ -41,10 +41,11 @@ void quicksort(vector<T> & v, int l, int r){
 		while(i < j){
 			swap(v[i], v[j]);
 			i++;
+			j--;
+
 			while(v[i]<pivot){
 				i++;
 			}
-			j--;
 			while(v[j]>pivot){
 				j--;
 			}
