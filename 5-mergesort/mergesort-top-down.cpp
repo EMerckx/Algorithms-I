@@ -16,7 +16,7 @@ template<typename T>
 void merge(vector <T> &v, int l, int m, int r, vector <T> &temp);
 
 template<typename T>
-void operator<<(ostream &os, vector <T> &v);
+ostream &operator<<(ostream &os, vector <T> &v);
 
 int main() {
     // create the vector of items
@@ -83,10 +83,11 @@ void merge(vector <T> &v, int l, int m, int r, vector <T> &temp) {
 
 // Shows the operator << how to print the vector
 template<typename T>
-void operator<<(ostream &os, vector <T> &v) {
+ostream &operator<<(ostream &os, vector <T> &v) {
     for (int i = 0; i < v.size(); i++) {
         os << v[i] << " ";
     }
     os << endl;
+    return os;
 }
 
