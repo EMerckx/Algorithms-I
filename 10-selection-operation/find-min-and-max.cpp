@@ -18,8 +18,8 @@ int main() {
     // print the unsorted vector
     cout << v;
 
-    // init minimum and maximum variables
-    int min = 9999, max = 0;
+    // declare minimum and maximum variables
+    int min, max;
     // find the min and max values in the vector
     find_min_and_max(v, min, max);
     // print the values
@@ -33,33 +33,38 @@ int main() {
 // of all the elements in the vector
 template<typename T>
 void find_min_and_max(vector <T> &v, T &min, T &max) {
-    T small, big;
-    // check every pair of items
-    for (int i = 1; i < v.size(); i += 2) {
-        if (v[i - 1] < v[i]) {
-            small = v[i - 1];
-            big = v[i];
+    if (v.size() > 0) {
+        min = v[0];
+        max = v[0];
+
+        T small, big;
+        // check every pair of items
+        for (int i = 1; i < v.size(); i += 2) {
+            if (v[i - 1] < v[i]) {
+                small = v[i - 1];
+                big = v[i];
+            }
+            else {
+                small = v[i];
+                big = v[i - 1];
+            }
+            if (small < min) {
+                min = small;
+            }
+            if (max < big) {
+                max = big;
+            }
         }
-        else {
-            small = v[i];
-            big = v[i - 1];
-        }
-        if (small < min) {
-            min = small;
-        }
-        if (max < big) {
-            max = big;
-        }
-    }
-    // if there are uneven items
-    // then 1 element is missed by the pairs
-    if (v.size() % 2 == 1) {
-        int i = v.size()-1;
-        if (v[i] < min) {
-            min = v[i];
-        }
-        else if (max < v[i]) {
-            max = v[i];
+        // if there are uneven items
+        // then 1 element is missed by the pairs
+        if (v.size() % 2 == 1) {
+            int i = v.size() - 1;
+            if (v[i] < min) {
+                min = v[i];
+            }
+            else if (max < v[i]) {
+                max = v[i];
+            }
         }
     }
 }
