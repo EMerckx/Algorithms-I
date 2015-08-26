@@ -31,7 +31,7 @@ int main() {
     for (int i = 0; i < v.size(); i++) {
         q2.push(v[i]);
     }
-    cout << "priority queue" << endl;
+    cout << "priority queue (standard = greater to smaller)" << endl;
     while (!q2.empty()) {
         cout << q2.top() << " ";
         q2.pop();
@@ -43,23 +43,35 @@ int main() {
     for (int i = 0; i < v.size(); i++) {
         q3.push(v[i]);
     }
-    cout << "priority queue" << endl;
+    cout << "priority queue (reversed = smaller to greater)" << endl;
     while (!q3.empty()) {
         cout << q3.top() << " ";
         q3.pop();
     }
     cout << endl << endl;
 
-    // priority queue reversed with pairs ________________________________
+    // priority queue with pairs _________________________________________
     vector <char> c = {'a', 'k', 'p', 'n', 'v', 'v', 'm', 'd', 'a', 'w', 'y', 'b'};
-    priority_queue < pair < int, char >, vector < pair < int, char >>, std::greater < pair < int, char >> > q4;
+    priority_queue <pair<int, char >> q4;
     for (int i = 0; i < v.size(); i++) {
         q4.push(pair<int, char>(v[i], c[i]));
     }
-    cout << "priority queue" << endl;
+    cout << "priority queue with pairs" << endl << "(standard = greater to smaller)" << endl;
     while (!q4.empty()) {
         cout << q4.top().first << "," << q4.top().second << " ";
         q4.pop();
+    }
+    cout << endl << endl;
+
+    // priority queue reversed with pairs ________________________________
+    priority_queue < pair < int, char >, vector < pair < int, char >>, std::greater < pair < int, char >> > q5;
+    for (int i = 0; i < v.size(); i++) {
+        q5.push(pair<int, char>(v[i], c[i]));
+    }
+    cout << "priority queue with pairs" << endl << "(reversed = smaller to greater)" << endl;
+    while (!q5.empty()) {
+        cout << q5.top().first << "," << q5.top().second << " ";
+        q5.pop();
     }
     cout << endl << endl;
 
