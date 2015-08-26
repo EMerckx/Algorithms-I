@@ -1,6 +1,7 @@
 # algorithms-i
 
 This is a repository for the course "Algorithms I", that I take at Ghent University.
+Friends of mine helped solving the problems. A special thanks to them.
 
 ## Setup 
 
