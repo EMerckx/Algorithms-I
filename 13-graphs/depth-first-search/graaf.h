@@ -290,14 +290,12 @@ void Graaf<TYPE>::handle_node(vector <int> &discovered_nodes, int i) const {
     cout << i << " ";
 
     // loop every neighbour of the current node
-    for (auto &kv : knopen[i]) {
+    for (auto &neighbour : knopen[i]) {
         // if node kv.first is not yet discovered, handle it
-        if (discovered_nodes[kv.first] == 0) {
-            handle_node(discovered_nodes, kv.first);
+        if (discovered_nodes[neighbour.first] == 0) {
+            handle_node(discovered_nodes, neighbour.first);
         }
     }
-
-
 }
 
 
