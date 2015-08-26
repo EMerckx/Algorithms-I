@@ -1,11 +1,11 @@
 #include "binboom.h"
 
-int main(){
+int main() {
     // init the file names
-    vector<string> files = { "input/input-file-1.txt", "input/input-file-2.txt"};
+    vector <string> files = {"input/input-file-1.txt", "input/input-file-2.txt"};
 
     // read from input files
-    for(int i=0; i<files.size(); i++){
+    for (int i = 0; i < files.size(); i++) {
         cout << "File " << files[i] << endl;
         BinaireBoom<string> tree(files[i]);
 

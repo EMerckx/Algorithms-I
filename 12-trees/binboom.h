@@ -214,9 +214,9 @@ void BinaireBoom<T>::schrijf_preorder(ostream &os) const {
 
 // write the tree in infix notation (inorder)
 // output: left key right
-template <class T>
+template<class T>
 void BinaireBoom<T>::schrijf_inorder(ostream &os) const {
-    if(this->get()){
+    if (this->get()) {
         this->get()->links.schrijf_inorder(os);
         os << this->get()->inhoud << " ";
         this->get()->rechts.schrijf_inorder(os);
@@ -225,9 +225,9 @@ void BinaireBoom<T>::schrijf_inorder(ostream &os) const {
 
 // write the tree in postfix notation (postorder)
 // output: left right key
-template <class T>
+template<class T>
 void BinaireBoom<T>::schrijf_postorder(ostream &os) const {
-    if(this->get()){
+    if (this->get()) {
         this->get()->links.schrijf_postorder(os);
         this->get()->rechts.schrijf_postorder(os);
         os << this->get()->inhoud << " ";
