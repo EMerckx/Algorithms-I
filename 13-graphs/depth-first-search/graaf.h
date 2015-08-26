@@ -285,6 +285,8 @@ template<GraafType TYPE>
 void Graaf<TYPE>::handle_node(vector <int> &discovered_nodes, int i) const {
     discovered_nodes[i] = 1;
 
+    // handle functionality
+    // here: print the node number
     cout << i << " ";
 
     // loop every neighbour of the current node
