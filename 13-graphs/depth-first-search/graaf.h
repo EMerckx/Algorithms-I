@@ -25,40 +25,40 @@ using std::endl;
 // ---------------------------- interface ----------------------------
 // -------------------------------------------------------------------
 
-typedef std::map<int, int>  Knoop;	// beeldt knoopnummer (van buur) af op verbindingsnummer
+typedef std::map <int, int> Knoop;    // beeldt knoopnummer (van buur) af op verbindingsnummer
 
 // -------------------------------------------------------------------
 
 class GraafExceptie : public std::logic_error {
 public:
-    GraafExceptie(const std::string &boodschap_) : std::logic_error(boodschap_) {}
+    GraafExceptie(const std::string &boodschap_) : std::logic_error(boodschap_) { }
 };
 
-std::ostream &operator<<(std::ostream &os, const GraafExceptie& exc)
-{
+std::ostream &operator<<(std::ostream &os, const GraafExceptie &exc) {
     return os << exc.what();
 }
 
 // -------------------------------------------------------------------
 
-enum GraafType { GERICHT, ONGERICHT };
+enum GraafType {
+    GERICHT, ONGERICHT
+};
 
 // -------------------------------------------------------------------
 
 // graaf-klasse geschikt voor ongerichte en gerichte grafen
 // ongewogen
 // knopen en verbindingen hebben triviale nummering (0..)
-template <GraafType TYPE>
-class Graaf
-{
+template<GraafType TYPE>
+class Graaf {
 public:
     // Construeert een graaf met gegeven aantal knopen (default 0), zonder verbindingen.
-    Graaf(int aantal_knopen=0);
+    Graaf(int aantal_knopen = 0);
 
-    virtual ~Graaf() {}
+    virtual ~Graaf() { }
 
     // Reset de graaf met gegeven aantal knopen (default 0), met lege knopen en zonder verbindingen.
-    virtual void init(int aantal_knopen=0);
+    virtual void init(int aantal_knopen = 0);
 
     // Voegt een nieuwe 'lege' knoop toe, d.w.z. zonder verbindingen.
     // Geeft knoopnummer van toegevoegde knoop terug (begint bij 0).
@@ -82,7 +82,7 @@ public:
     // Toegang tot de knopen:
     const Knoop &operator[](int i) const { return knopen[i]; }
 
-    Knoop &operator[](int i)       { return knopen[i]; }	// deze kan als lvalue gebruikt worden
+    Knoop &operator[](int i) { return knopen[i]; }    // deze kan als lvalue gebruikt worden
 
 
     // Schrijft de gegevens van de volledige graaf naar outputstream 'os'.
@@ -98,34 +98,36 @@ public:
     virtual void lees(std::istream &is);
 
     // own implementation
-    void depth_first_search();
+    void depth_first_search() const;
 
 protected:
 
-    void controleer_knoopnummer(int k) const;	// throw indien k ongeldig
+    void controleer_knoopnummer(int k) const;    // throw indien k ongeldig
 
     virtual void schrijf_knoop(std::ostream &os, int k) const;
+
     virtual void schrijf_verbinding(std::ostream &os, int van, int naar) const;
 
     virtual void lees_knoop(std::istream &is);
+
     virtual void lees_verbinding(std::istream &is);
 
-    std::vector<Knoop> knopen;
-    int                nverbindingen;
+    std::vector <Knoop> knopen;
+    int nverbindingen;
 
 private:
     //own implementation
-    void handle_node(vector<int> &discovered_nodes, int i);
+    void handle_node(vector <int> &discovered_nodes, int i) const;
 };
 
 
 // Uitschrijven
-template <GraafType TYPE>
+template<GraafType TYPE>
 std::ostream &operator<<(std::ostream &os, const Graaf<TYPE> &g);
 
 
 // Inlezen
-template <GraafType TYPE>
+template<GraafType TYPE>
 std::istream &operator>>(std::istream &is, Graaf<TYPE> &g);
 
 
@@ -133,46 +135,40 @@ std::istream &operator>>(std::istream &is, Graaf<TYPE> &g);
 // -------------------------- implementatie --------------------------
 // -------------------------------------------------------------------
 
-template <GraafType TYPE>
-void Graaf<TYPE>::controleer_knoopnummer(int k) const
-{
-    if (k<0 || (size_t)k>=knopen.size())
+template<GraafType TYPE>
+void Graaf<TYPE>::controleer_knoopnummer(int k) const {
+    if (k < 0 || (size_t) k >= knopen.size())
         throw GraafExceptie("ongeldig knoopnummer");
 }
 
 
-template <GraafType TYPE>
+template<GraafType TYPE>
 Graaf<TYPE>::Graaf(int n)
-        : knopen(n), nverbindingen(0)
-{}
+        : knopen(n), nverbindingen(0) { }
 
 
-template <GraafType TYPE>
-void Graaf<TYPE>::init(int n)
-{
+template<GraafType TYPE>
+void Graaf<TYPE>::init(int n) {
     knopen.clear();
     knopen.resize(n);
     nverbindingen = 0;
 }
 
 
-template <GraafType TYPE>
-int Graaf<TYPE>::voeg_knoop_toe()
-{
+template<GraafType TYPE>
+int Graaf<TYPE>::voeg_knoop_toe() {
     int n = knopen.size();
-    knopen.resize(n+1);	// default constructor voor nieuwe knoop wordt opgeroepen (hier lege map)
+    knopen.resize(n + 1);    // default constructor voor nieuwe knoop wordt opgeroepen (hier lege map)
     return n;
 }
 
 
-template <GraafType TYPE>
-int Graaf<TYPE>::voeg_verbinding_toe(int van, int naar)
-{
+template<GraafType TYPE>
+int Graaf<TYPE>::voeg_verbinding_toe(int van, int naar) {
     controleer_knoopnummer(van);
     controleer_knoopnummer(naar);
 
-    if (knopen[van].count(naar) > 0)
-    {
+    if (knopen[van].count(naar) > 0) {
         std::ostringstream out;
         out << "verbinding " << van << "-" << naar << " bestaat al";
         throw GraafExceptie(out.str());
@@ -180,133 +176,121 @@ int Graaf<TYPE>::voeg_verbinding_toe(int van, int naar)
     else {
         int t = nverbindingen++;
         knopen[van][naar] = t;
-        if (TYPE==ONGERICHT && van!=naar)
+        if (TYPE == ONGERICHT && van != naar)
             knopen[naar][van] = t;
         return t;
     }
 }
 
 
-template <GraafType TYPE>
-int Graaf<TYPE>::aantal_knopen() const
-{
+template<GraafType TYPE>
+int Graaf<TYPE>::aantal_knopen() const {
     return knopen.size();
 }
 
 
-template <GraafType TYPE>
-int Graaf<TYPE>::aantal_verbindingen() const
-{
+template<GraafType TYPE>
+int Graaf<TYPE>::aantal_verbindingen() const {
     return nverbindingen;
 }
 
 
-template <GraafType TYPE>
-void Graaf<TYPE>::schrijf(std::ostream &os) const
-{
-    os << (TYPE==GERICHT ? "gericht" : "ongericht") << std::endl;
+template<GraafType TYPE>
+void Graaf<TYPE>::schrijf(std::ostream &os) const {
+    os << (TYPE == GERICHT ? "gericht" : "ongericht") << std::endl;
     os << aantal_knopen() << " knopen" << std::endl;
     os << aantal_verbindingen() << " verbindingen" << std::endl;
-    for (int van=0; van<aantal_knopen(); van++)
+    for (int van = 0; van < aantal_knopen(); van++)
         schrijf_knoop(os, van);
-    for (int van=0; van<aantal_knopen(); van++)
-    {
-        for (Knoop::const_iterator it=knopen[van].begin(); it!=knopen[van].end(); ++it)
-        {
+    for (int van = 0; van < aantal_knopen(); van++) {
+        for (Knoop::const_iterator it = knopen[van].begin(); it != knopen[van].end(); ++it) {
             int naar = it->first;
-            if (TYPE==GERICHT || van<=naar )
+            if (TYPE == GERICHT || van <= naar)
                 schrijf_verbinding(os, van, naar);
         }
     }
 }
 
 
-template <GraafType TYPE>
-void Graaf<TYPE>::schrijf_knoop(std::ostream &os, int k) const
-{
+template<GraafType TYPE>
+void Graaf<TYPE>::schrijf_knoop(std::ostream &os, int k) const {
 }
 
-template <GraafType TYPE>
-void Graaf<TYPE>::schrijf_verbinding(std::ostream &os, int van, int naar) const
-{
+template<GraafType TYPE>
+void Graaf<TYPE>::schrijf_verbinding(std::ostream &os, int van, int naar) const {
     os << van << "  " << naar << std::endl;
 }
 
 
-template <GraafType TYPE>
-void Graaf<TYPE>::lees(std::istream &is)
-{
+template<GraafType TYPE>
+void Graaf<TYPE>::lees(std::istream &is) {
     std::string type;
     int n, m;
 
     is >> type;
-    if (TYPE==GERICHT && type!="gericht" || TYPE==ONGERICHT && type!="ongericht")
+    if (TYPE == GERICHT && type != "gericht" || TYPE == ONGERICHT && type != "ongericht")
         throw GraafExceptie("Graaftype klopt niet");
     is >> n;
     init(n);
-    for (int i=0; i<n; i++)
+    for (int i = 0; i < n; i++)
         lees_knoop(is);
     is >> m;
-    for (int j=0; j<m; j++)
+    for (int j = 0; j < m; j++)
         lees_verbinding(is);
     if (!is)
         throw GraafExceptie("Fout bij het inlezen");
 }
 
 
-template <GraafType TYPE>
-void Graaf<TYPE>::lees_knoop(std::istream &is)
-{
+template<GraafType TYPE>
+void Graaf<TYPE>::lees_knoop(std::istream &is) {
 }
 
-template <GraafType TYPE>
-void Graaf<TYPE>::lees_verbinding(std::istream &is)
-{
+template<GraafType TYPE>
+void Graaf<TYPE>::lees_verbinding(std::istream &is) {
     int van, naar;
     is >> van >> naar;
     voeg_verbinding_toe(van, naar);
 }
 
-template <GraafType TYPE>
-std::ostream &operator<<(std::ostream &os, const Graaf<TYPE> &g)
-{
+template<GraafType TYPE>
+std::ostream &operator<<(std::ostream &os, const Graaf<TYPE> &g) {
     g.schrijf(os);
     return os;
 }
 
-template <GraafType TYPE>
-std::istream &operator>>(std::istream &is, Graaf<TYPE> &g)
-{
+template<GraafType TYPE>
+std::istream &operator>>(std::istream &is, Graaf<TYPE> &g) {
     g.lees(is);
     return is;
 }
 
 // OWN IMPLEMENTATION _____________________________________________________________
 
-template <GraafType TYPE>
-void Graaf<TYPE>::depth_first_search() {
+template<GraafType TYPE>
+void Graaf<TYPE>::depth_first_search() const {
     // init a vector for the discovered nodes
     // the index is the number of the node
-    vector<int> discovered_nodes(aantal_knopen(), 0);
+    vector <int> discovered_nodes(aantal_knopen(), 0);
 
-    for(int i = 0; i<aantal_knopen(); i++){
+    for (int i = 0; i < aantal_knopen(); i++) {
         // if node i is not yet discovered, handle it
-        if(discovered_nodes[i] == 0 ){
+        if (discovered_nodes[i] == 0) {
             handle_node(discovered_nodes, i);
         }
     }
 }
 
-template <GraafType TYPE>
-void Graaf<TYPE>::handle_node(vector<int> &discovered_nodes, int i) {
+template<GraafType TYPE>
+void Graaf<TYPE>::handle_node(vector <int> &discovered_nodes, int i) const {
     discovered_nodes[i] = 1;
 
     cout << i << " ";
 
     // loop every neighbour of the current node
-    for(auto& kv : knopen[i]){
+    for (auto &kv : knopen[i]) {
         // if node kv.first is not yet discovered, handle it
-        if(discovered_nodes[kv.first] == 0){
+        if (discovered_nodes[kv.first] == 0) {
             handle_node(discovered_nodes, kv.first);
         }
     }
