@@ -6,6 +6,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <queue>
 
 using std::cin;
 using std::cout;
@@ -18,6 +19,7 @@ using std::string;
 using std::unique_ptr;
 using std::move;
 using std::vector;
+using std::queue;
 
 template<class T>
 class Binknoop;
@@ -43,6 +45,8 @@ private:
 
     void schrijf_postorder(ostream &os) const;
 
+    void schrijf_inlevelorder(ostream &os) const;
+
 public:
     BinaireBoom<T>() { aantal_boom_constructor++; }
 
@@ -60,7 +64,8 @@ public:
     void schrijf(ostream &os, const string &volgorde = "in") const {
         if (volgorde == "inorder" || volgorde == "in") schrijf_inorder(os);
         else if (volgorde == "preorder" || volgorde == "pre") schrijf_preorder(os);
-        else schrijf_postorder(os);
+        else if (volgorde == "postorder" || volgorde == "post") schrijf_postorder(os);
+        else schrijf_inlevelorder(os);
     }
 
     friend ostream &operator<<(ostream &os, const BinaireBoom<T> &b) {
@@ -231,6 +236,34 @@ void BinaireBoom<T>::schrijf_postorder(ostream &os) const {
         this->get()->links.schrijf_postorder(os);
         this->get()->rechts.schrijf_postorder(os);
         os << this->get()->inhoud << " ";
+    }
+}
+
+// write the tree in level notation (in level order)
+// output: parent node neighbors children
+template<class T>
+void BinaireBoom<T>::schrijf_inlevelorder(ostream &os) const {
+    if (this->get()) {
+        queue < Binknoop<T> * > q;
+        Binknoop<T> *h = this->get();
+
+        // first add the root
+        q.push(h);
+        while (!q.empty()) {
+            Binknoop<T> *current = q.front();
+            q.pop();
+
+            // print the value of the node
+            os << current->inhoud << " ";
+
+            // add the children of the node to the queue
+            if (current->links.get()) {
+                q.push(current->links.get());
+            }
+            if (current->rechts.get()) {
+                q.push(current->rechts.get());
+            }
+        }
     }
 }
 

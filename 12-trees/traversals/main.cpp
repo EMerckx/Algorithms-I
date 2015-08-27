@@ -21,6 +21,10 @@ int main() {
         tree.schrijf(cout, "postorder");
         cout << endl;
 
+        cout << "Level order: ";
+        tree.schrijf(cout, "levelorder");
+        cout << endl;
+
         cout << endl;
     }
 
