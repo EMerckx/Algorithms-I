@@ -7,12 +7,18 @@
  te vergemakkelijken.
 */
 #include <iostream>
-   using std::istream;
-   using std::ostream;
+    using std::istream;
+    using std::ostream;
+#include <algorithm>
     using std::move;
     using std::swap;
+    using std::reverse;
+    using std::random_shuffle;
 #include <iomanip>   // voor setw
 #include <cstdlib>   // voor rand - opletten!! 
+    using std::srand;
+#include <ctime>
+    using std::time;
 #include <vector>
     using std::vector;
 
@@ -54,6 +60,77 @@ class Sortvector:public vector<T>{
     
 };
 
+template <class T>
+Sortvector<T>::Sortvector(int length){
+    this->resize(length);
+}
+
+template <class T>
+void Sortvector<T>::vul_range(){
+    T value = 0;
+    for(auto&& t : *this){
+        t = value;
+        value++;
+    }
+}
+
+template <class T>
+void Sortvector<T>::draai_om(){
+    reverse(this->begin(), this->end());
+}
+
+template <class T>
+void Sortvector<T>::vul_omgekeerd(){
+    T value = (T) this->size() - 1;
+    for(auto&& t : *this){
+        t = value;
+        value--;
+    }
+}
+
+template <class T>
+void Sortvector<T>::shuffle(){
+    random_shuffle(this->begin(), this->end());
+}
+
+template <class T>
+void Sortvector<T>::vul_random_zonder_dubbels(){
+    this->vul_range();
+    this->shuffle();
+}
+
+template <class T>
+bool Sortvector<T>::is_gesorteerd() const {
+    int length = this->size();
+
+    if(length == 0){
+        return true;
+    }
+
+    int i = 1;
+    while(i < length && this->at(i-1) <= this->at(i) ){
+        i++;
+    }
+
+    return (i == length);
+}
+
+template <class T>
+bool Sortvector<T>::is_range() const {
+    int length = this->size();
+
+    if(length == 0){
+        return true;
+    }
+
+    int i = 1;
+    while(i < length && this->at(i-1) == this->at(i) - 1 ){
+        i++;
+    }
+
+    return (i == length);
+}
+
 
 template <class T>
 void Sortvector<T>::schrijf(ostream & os)const{
@@ -62,7 +139,6 @@ void Sortvector<T>::schrijf(ostream & os)const{
     }
     os<<"\n";
 }
-
 
 
 #endif
