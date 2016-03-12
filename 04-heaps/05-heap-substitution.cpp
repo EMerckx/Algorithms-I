@@ -7,6 +7,7 @@ using std::ostream;
 using std::endl;
 using std::vector;
 using std::swap;
+using std::move;
 
 template<typename T>
 void create_heap(vector <T> &v);
@@ -15,7 +16,7 @@ template<typename T>
 void heapify(vector <T> &v, int i);
 
 template<typename T>
-void delete_root(vector <T> &v);
+void substitute_in_heap(vector <T> &v, int index, T& element);
 
 template<typename T>
 ostream &operator<<(ostream &os, vector <T> &v);
@@ -31,8 +32,9 @@ int main() {
     // print the heap vector
     cout << "Heap vector \n";
     cout << v;
-    // delete the root
-    delete_root(v);
+    // create and substitute a new element
+    int new_element = 0;
+    substitute_in_heap(v, 2, new_element);
     // print the new heap vector
     cout << "New heap vector \n";
     cout << v;
@@ -68,15 +70,15 @@ void heapify(vector <T> &v, int i) {
 }
 
 template<typename T>
-void delete_root(vector <T> &v){
-    // swap the root with the last element
-    swap(v[0], v[v.size() - 1]);
+void substitute_in_heap(vector <T> &v, int index, T& element){
+    // check the index
+    if(index < v.size()){
+        // insert the element at the specified index
+        v[index] = move(element);
 
-    // remove the last element
-    v.resize(v.size() - 1);
-
-    // reconstruct heap
-    heapify(v, 0);
+        // ensure the heap condition
+        heapify(v, index);
+    }
 }
 
 // Shows the operator << how to print the vector
