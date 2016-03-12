@@ -1,10 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <utility>
 
 using std::cout;
 using std::ostream;
 using std::endl;
 using std::vector;
+using std::swap;
 
 template<typename T>
 void create_heap(vector <T> &v);
@@ -15,17 +17,16 @@ void heapify(vector <T> &v, int i);
 template<typename T>
 ostream &operator<<(ostream &os, vector <T> &v);
 
-template<typename T>
-void swap(T &a, T &b);
-
 int main() {
     // create the vector of items
-    vector <int> v = {1, 5, 3, 7, 2, 9};
+    vector <int> v = {1, 5, 3, 7, 2, 9, 8, 4};
     // print the unsorted vector
+    cout << "Original vector \n";
     cout << v;
     // sort the vector
     create_heap(v);
-    // print the sorted vector
+    // print the heap vector
+    cout << "Heap vector \n";
     cout << v;
 
     return 0;
@@ -66,13 +67,5 @@ ostream &operator<<(ostream &os, vector <T> &v) {
     }
     os << endl;
     return os;
-}
-
-// Swaps the value of a with the value of b
-template<typename T>
-void swap(T &a, T &b) {
-    T temp = a;
-    a = b;
-    b = temp;
 }
 
