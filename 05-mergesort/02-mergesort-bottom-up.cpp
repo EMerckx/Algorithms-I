@@ -12,9 +12,6 @@ template<typename T>
 void mergesort(vector <T> &v);
 
 template<typename T>
-void mergesort(vector <T> &v, int l, int r, vector <T> &temp);
-
-template<typename T>
 void merge(vector <T> &v, int l, int m, int r, vector <T> &temp);
 
 template<typename T>
@@ -42,10 +39,10 @@ int main() {
 }
 
 // Sorts the vector v iteratively
-// Uses a temporary vector of half the size
+// Uses a temporary vector of the whole size
 template<typename T>
 void mergesort(vector <T> &v) {
-    vector <T> temp(v.size() / 2);
+    vector <T> temp(v.size());
 
     int subvector_size = 2;
     while(subvector_size < v.size()){
@@ -59,29 +56,19 @@ void mergesort(vector <T> &v) {
             r += subvector_size;
         }
         if(l < v.size()){
-            int m = l + (v.size() - l) / 2;
-            merge(v, l, m, v.size()-1, temp);
+            int m = l + subvector_size / 2 - 1;
+
+            if(m < v.size()){
+                merge(v, l, m, v.size()-1, temp);
+            }
         }
 
         subvector_size *= 2;
     }
 
-    int m = (v.size() - 1) / 2;
+    // merge the remaining 2 parts
+    int m = subvector_size / 2 - 1;
     merge(v, 0, m, v.size()-1, temp);
-}
-
-// Sorts the subvector v[l..r] by merging
-// Uses a temporary vector
-// Uses recursion
-template<typename T>
-void mergesort(vector <T> &v, int l, int r, vector <T> &temp) {
-    if (l < r) {
-        int m = l + (r - l) / 2;
-        mergesort(v, l, m, temp);
-        mergesort(v, m + 1, r, temp);
-
-        merge(v, l, m, r, temp);
-    }
 }
 
 template<typename T>
