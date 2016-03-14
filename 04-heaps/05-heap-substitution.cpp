@@ -33,7 +33,7 @@ int main() {
     cout << "Heap vector \n";
     cout << v;
     // create and substitute a new element
-    int new_element = 0;
+    int new_element = 10;
     substitute_in_heap(v, 2, new_element);
     // print the new heap vector
     cout << "New heap vector \n";
@@ -75,6 +75,22 @@ void substitute_in_heap(vector <T> &v, int index, T& element){
     if(index < v.size()){
         // insert the element at the specified index
         v[index] = move(element);
+
+        //section: parent is smaller------------------------------
+
+        // get the index of the parent
+        int index_parent = (index - 1) / 2;
+
+        // if greater than parent, move in direction of top
+        while(index_parent >= 0 && v[index] > v[index_parent]){
+            swap(v[index], v[index_parent]);
+
+            // recalculate indexes
+            index = index_parent;
+            index_parent = (index - 1) / 2;
+        }
+
+        //section: parent is larger-------------------------------
 
         // ensure the heap condition
         heapify(v, index);
