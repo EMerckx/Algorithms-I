@@ -23,9 +23,9 @@ int main(){
 	shellSedgewickSort.meet(10, 10000, cout);
 
 	/* ShellShellSort */
-	cout << "ShellShellSort \n";
+	/*cout << "ShellShellSort \n";
 	ShellShellSort<int> shellShellSort;
-	shellShellSort.meet(10, 10000, cout);
+	shellShellSort.meet(10, 10000, cout);*/
 
 	return 0;
 }
