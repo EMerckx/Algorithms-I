@@ -195,11 +195,12 @@ int Graaf<TYPE>::aantal_verbindingen() const {
 
 template<GraafType TYPE>
 void Graaf<TYPE>::schrijf(std::ostream &os) const {
-    os << (TYPE == GERICHT ? "gericht" : "ongericht") << std::endl;
-    os << aantal_knopen() << std::endl;
-    os << aantal_verbindingen() << std::endl;
+    os << "Type:                " << (TYPE == GERICHT ? "gericht" : "ongericht") << std::endl;
+    os << "Aantal knopen:       " << aantal_knopen() << std::endl;
+    os << "Aantal verbindingen: " << aantal_verbindingen() << std::endl;
     for (int van = 0; van < aantal_knopen(); van++)
         schrijf_knoop(os, van);
+    os << "Verbindingen (van knoop naar knoop): " << std::endl;
     for (int van = 0; van < aantal_knopen(); van++) {
         for (Knoop::const_iterator it = knopen[van].begin(); it != knopen[van].end(); ++it) {
             int naar = it->first;
@@ -288,7 +289,7 @@ void Graaf<TYPE>::breadth_first_search() const {
                 cout << node << " ";
 
                 // loop every neighbour of the current node
-                for (auto &neighbour : knopen[i]) {
+                for (auto &neighbour : knopen[node]) {
                     // if node kv.first is not yet discovered, handle it
                     if (discovered_nodes[neighbour.first] == 0) {
                         q.push(neighbour.first);
