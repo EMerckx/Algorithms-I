@@ -245,10 +245,10 @@ template<class T>
 void BinaireBoom<T>::schrijf_inlevelorder(ostream &os) const {
     if (this->get()) {
         queue < Binknoop<T> * > q;
-        Binknoop<T> *h = this->get();
-
+        
         // first add the root
-        q.push(h);
+        q.push(this->get());
+        
         while (!q.empty()) {
             Binknoop<T> *current = q.front();
             q.pop();
