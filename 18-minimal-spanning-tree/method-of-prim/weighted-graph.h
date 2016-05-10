@@ -14,19 +14,24 @@ using std::greater;
 using std::cout;
 using std::endl;
 
+template <class Edgedata>
+using Mstdata = pair < Edgedata, pair < int, int >>;
+
 enum Color {
     WHITE, BLACK
 };
 
 // returns the minimal spanning tree
+// as a vector where the edge numbers are mapped to booleans
+// to indicate whether the edge is in the mst or not 
 template<class Edgedata>
 vector <bool> GewogenGraaf<Edgedata>::get_mst() const {
     if (knopen.size() > 0) {
         // init
         vector <bool> mst_edges(aantal_verbindingen(), false);
         vector <Color> colors(aantal_knopen(), WHITE);
-        priority_queue < pair < int, pair < int, int >>, vector < pair < int, pair < int, int >> >,
-                greater < pair < int, pair < int, int >> >> q;
+        priority_queue < Mstdata<Edgedata>, vector< Mstdata<Edgedata> >, 
+            greater< Mstdata<Edgedata> > > q;
 
         int i = 0;
         while (i < aantal_knopen()) {
@@ -35,13 +40,13 @@ vector <bool> GewogenGraaf<Edgedata>::get_mst() const {
                 for (auto &kv : knopen[i]) {
                     // kv.first is destination node
                     // kv.second is edge number
-                    q.push(pair < Edgedata, pair < int, int > > (takdatavector[kv.second], kv));
+                    q.push( Mstdata<Edgedata>(takdatavector[kv.second], kv) );
                 }
                 colors[i] = BLACK;
 
                 while (!q.empty()) {
                     // get the edge with the lowest cost
-                    pair <int, pair<int, int>> lowest_cost_edge = q.top();
+                    Mstdata<Edgedata> lowest_cost_edge = q.top();
                     q.pop();
 
                     // get the number of the next node
@@ -62,7 +67,7 @@ vector <bool> GewogenGraaf<Edgedata>::get_mst() const {
                         // BUT only when the neighbour is a white node!
                         for (auto &kv : knopen[j]) {
                             if (colors[kv.first] == WHITE) {
-                                q.push(pair < Edgedata, pair < int, int > > (takdatavector[kv.second], kv));
+                                q.push(Mstdata<Edgedata> (takdatavector[kv.second], kv));
                             }
                         }
 
