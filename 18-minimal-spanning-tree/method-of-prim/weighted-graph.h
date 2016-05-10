@@ -33,8 +33,7 @@ vector <bool> GewogenGraaf<Edgedata>::get_mst() const {
         priority_queue < Mstdata<Edgedata>, vector< Mstdata<Edgedata> >, 
             greater< Mstdata<Edgedata> > > q;
 
-        int i = 0;
-        while (i < aantal_knopen()) {
+        for( int i = 0; i < aantal_knopen(); i++ ){
             if (colors[i] == WHITE) {
                 // add all the egdes of the firste node to the queue
                 for (auto &kv : knopen[i]) {
@@ -76,7 +75,6 @@ vector <bool> GewogenGraaf<Edgedata>::get_mst() const {
                     }
                 }
             }
-            i++;
         }
         return mst_edges;
     }
