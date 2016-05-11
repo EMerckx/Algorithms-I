@@ -20,6 +20,8 @@ using std::unique_ptr;
 using std::vector;
 using std::sort;
 using std::setw;
+using std::move;
+using std::swap;
 
 template<class T>
 class Knoop;
@@ -50,6 +52,8 @@ public:
     int max_depth() const;
 
     double avg_depth() const;
+
+    void delete_key(const T &sl);
 
 protected:
     Zoekboom *plaats_van_sleutel(
@@ -232,5 +236,59 @@ void Zoekboom<T>::create_depth_vector(vector <int> &v, int depth) const {
     }
 }
 
+// Deletes the node with the specified key
+template <class T>
+void Zoekboom<T>::delete_key(const T& sl) {
+    Zoekboom<T>* here = plaats_van_sleutel(sl);
+    if(here->get()){
+        if(here->get()->links.get() && here->get()->rechts.get()){
+            // if two children detected: find pointer to successor
+            Zoekboom<T>* successor_parent = here;
+            Zoekboom<T>* successor = &here->get()->rechts;
+            while(successor->get()->links){
+                successor_parent = successor;
+                successor = &successor->get()->links;
+            }
+
+            // move the successor pointer to a successor node
+            Zoekboom<T> suc = move(*successor);
+
+            // if the successor has a right child, 
+            // move it into the successor's place
+            if(suc.get()->rechts){
+                successor_parent->get()->links = move(suc.get()->rechts);
+            }
+
+            // move the children of the current node to the successor node
+            // move the successor node into the current node 
+            suc.get()->links = move(here->get()->links);
+            suc.get()->rechts = move(here->get()->rechts);
+            (*here) = move(suc);
+        }
+        else if(here->get()->links.get()){
+            // moving the left child into the current node
+            (*here) = move(here->get()->links); 
+        }
+        else if(here->get()->rechts.get()){
+            // moving the right child into the current node
+            (*here) = move(here->get()->rechts);   
+        }
+        else {
+            // since no children, we can reset the current node
+            here->reset();
+        }
+    }
+}
+/*
+template<class T>
+bool Zoekboom<T>::voeg_toe(const T &sl) {
+    Zoekboom *hier = plaats_van_sleutel(sl);
+    if (*hier == nullptr) {
+        hier->voeg_wortel_toe(sl);
+        return true;
+    }
+    return false;
+}
+*/
 
 #endif
